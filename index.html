@@ -7,6 +7,10 @@
 
   <meta name="description" content="Scopri subito se oggi è festivo in Italia. Risposta chiara: SÌ o NO.">
   <meta name="robots" content="index, follow">
+  <meta name="theme-color" content="#0f0f10">
+
+  <!-- PWA -->
+  <link rel="manifest" href="/manifest.webmanifest">
 
   <style>
     body {
@@ -156,6 +160,11 @@
   } else {
     answerEl.textContent = "NO";
     detailEl.textContent = "Giorno lavorativo";
+  }
+
+  // Service Worker
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("/sw.js").catch(() => {});
   }
 </script>
 </body>
