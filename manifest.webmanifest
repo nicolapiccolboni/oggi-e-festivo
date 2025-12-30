@@ -1,0 +1,8 @@
+{
+  "name": "Oggi è festivo?",
+  "short_name": "Festivo?",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0f0f10",
+  "theme_color": "#0f0f10"
+}
