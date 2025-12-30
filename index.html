@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Oggi è festivo?</title>
+
+  <meta name="description" content="Scopri subito se oggi è festivo in Italia. Risposta chiara: SÌ o NO.">
+  <meta name="robots" content="index, follow">
+
+  <style>
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: #0f0f10;
+      color: #ffffff;
+    }
+    .wrap {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+    .card {
+      max-width: 520px;
+      width: 100%;
+      background: #18181b;
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+    }
+    h1 {
+      margin: 0 0 12px 0;
+      font-size: 22px;
+      opacity: 0.9;
+    }
+    .date {
+      font-size: 14px;
+      opacity: 0.7;
+      margin-bottom: 24px;
+    }
+    .answer {
+      font-size: 96px;
+      font-weight: 800;
+      line-height: 1;
+      margin-bottom: 12px;
+    }
+    .detail {
+      font-size: 18px;
+      opacity: 0.85;
+    }
+    .note {
+      margin-top: 24px;
+      font-size: 13px;
+      opacity: 0.6;
+      line-height: 1.4;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <div class="card">
+      <h1>Oggi è festivo?</h1>
+      <div class="date" id="date"></div>
+      <div class="answer" id="answer">—</div>
+      <div class="detail" id="detail"></div>
+      <div class="note">
+        Include festività nazionali italiane e la domenica.
+      </div>
+    </div>
+  </div>
+
+<script>
+  const today = new Date();
+
+  const days = ["Domenica","Lunedì","Martedì","Mercoledì","Giovedì","Venerdì","Sabato"];
+  const months = ["gennaio","febbraio","marzo","aprile","maggio","giugno","luglio","agosto","settembre","ottobre","novembre","dicembre"];
+
+  function formatDate(d) {
+    return `${days[d.getDay()]} ${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`;
+  }
+
+  function pad(n) {
+    return n < 10 ? "0" + n : n;
+  }
+
+  function iso(d) {
+    return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+  }
+
+  function easter(year) {
+    const f = Math.floor;
+    const a = year % 19;
+    const b = f(year / 100);
+    const c = year % 100;
+    const d = f(b / 4);
+    const e = b % 4;
+    const g = f((8 * b + 13) / 25);
+    const h = (19 * a + b - d - g + 15) % 30;
+    const i = f(c / 4);
+    const k = c % 4;
+    const l = (32 + 2 * e + 2 * i - h - k) % 7;
+    const m = f((a + 11 * h + 22 * l) / 451);
+    const month = f((h + l - 7 * m + 114) / 31);
+    const day = ((h + l - 7 * m + 114) % 31) + 1;
+    return new Date(year, month - 1, day);
+  }
+
+  function italianHolidays(year) {
+    const map = {};
+    map[`${year}-01-01`] = "Capodanno";
+    map[`${year}-01-06`] = "Epifania";
+    map[`${year}-04-25`] = "Festa della Liberazione";
+    map[`${year}-05-01`] = "Festa dei Lavoratori";
+    map[`${year}-06-02`] = "Festa della Repubblica";
+    map[`${year}-08-15`] = "Ferragosto";
+    map[`${year}-11-01`] = "Ognissanti";
+    map[`${year}-12-08`] = "Immacolata Concezione";
+    map[`${year}-12-25`] = "Natale";
+    map[`${year}-12-26`] = "Santo Stefano";
+
+    const e = easter(year);
+    const em = new Date(e);
+    em.setDate(e.getDate() + 1);
+
+    map[iso(e)] = "Pasqua";
+    map[iso(em)] = "Lunedì dell’Angelo";
+
+    return map;
+  }
+
+  document.getElementById("date").textContent = formatDate(today);
+
+  const holidays = italianHolidays(today.getFullYear());
+  const key = iso(today);
+
+  let isHoliday = false;
+  let label = "";
+
+  if (holidays[key]) {
+    isHoliday = true;
+    label = holidays[key];
+  } else if (today.getDay() === 0) {
+    isHoliday = true;
+    label = "Domenica";
+  }
+
+  const answerEl = document.getElementById("answer");
+  const detailEl = document.getElementById("detail");
+
+  if (isHoliday) {
+    answerEl.textContent = "SÌ";
+    detailEl.textContent = label;
+  } else {
+    answerEl.textContent = "NO";
+    detailEl.textContent = "Giorno lavorativo";
+  }
+</script>
+</body>
+</html>
