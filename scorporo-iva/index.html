@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Scorporo IVA 22%: calcola netto e IVA</title>
+  <meta name="description" content="Scorporo IVA 22% immediato: inserisci il prezzo lordo e ottieni netto e IVA in un secondo.">
+  <meta name="robots" content="index, follow">
+  <meta name="theme-color" content="#0f0f10">
+
+  <style>
+    body{margin:0;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:#0f0f10;color:#fff}
+    .wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px}
+    .card{max-width:560px;width:100%;background:#18181b;border-radius:16px;padding:24px;box-shadow:0 10px 30px rgba(0,0,0,.4)}
+    h1{margin:0 0 8px 0;font-size:22px;opacity:.92}
+    .sub{margin:0 0 18px 0;font-size:14px;opacity:.7;line-height:1.4}
+    label{display:block;font-size:13px;opacity:.8;margin:12px 0 6px}
+    input,select{width:100%;padding:12px 12px;border-radius:12px;border:1px solid rgba(255,255,255,.12);background:#0f0f10;color:#fff;font-size:16px;outline:none}
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .big{font-size:56px;font-weight:850;line-height:1;margin:18px 0 8px}
+    .detail{font-size:16px;opacity:.85;line-height:1.35}
+    .note{margin-top:18px;font-size:12px;opacity:.6;line-height:1.4}
+    .row{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+    .pill{padding:10px 12px;border-radius:999px;background:rgba(255,255,255,.06);font-size:13px;opacity:.9}
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <div class="card">
+      <h1>Scorporo IVA</h1>
+      <p class="sub">Inserisci il prezzo <b>lordo</b>. Ottieni subito <b>netto</b> e <b>IVA</b>.</p>
+
+      <div class="grid">
+        <div>
+          <label for="gross">Prezzo lordo (€)</label>
+          <input id="gross" inputmode="decimal" placeholder="es. 122,00">
+        </div>
+        <div>
+          <label for="vat">Aliquota IVA</label>
+          <select id="vat">
+            <option value="22" selected>22%</option>
+            <option value="10">10%</option>
+            <option value="5">5%</option>
+            <option value="4">4%</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="big" id="net">€ —</div>
+      <div class="detail" id="breakdown">Netto — • IVA —</div>
+
+      <div class="row">
+        <div class="pill" id="pillGross">Lordo: —</div>
+        <div class="pill" id="pillVat">IVA: —</div>
+        <div class="pill" id="pillNet">Netto: —</div>
+      </div>
+
+      <div class="note">
+        Calcolo: netto = lordo / (1 + IVA). IVA = lordo - netto. Arrotondamento a 2 decimali.
+      </div>
+    </div>
+  </div>
+
+<script>
+  const grossEl = document.getElementById("gross");
+  const vatEl = document.getElementById("vat");
+  const netEl = document.getElementById("net");
+  const breakdownEl = document.getElementById("breakdown");
+  const pillGross = document.getElementById("pillGross");
+  const pillVat = document.getElementById("pillVat");
+  const pillNet = document.getElementById("pillNet");
+
+  function parseEuro(s) {
+    if (!s) return NaN;
+    // accetta "122,50" o "122.50" o "1.234,56"
+    const cleaned = s
+      .toString()
+      .trim()
+      .replace(/\s/g, "")
+      .replace(/\./g, "")
+      .replace(",", ".");
+    return Number(cleaned);
+  }
+
+  function fmtEUR(n) {
+    return new Intl.NumberFormat("it-IT", { style: "currency", currency: "EUR" }).format(n);
+  }
+
+  function calc() {
+    const gross = parseEuro(grossEl.value);
+    const vat = Number(vatEl.value) / 100;
+
+    if (!isFinite(gross) || gross <= 0) {
+      netEl.textContent = "€ —";
+      breakdownEl.textContent = "Netto — • IVA —";
+      pillGross.textContent = "Lordo: —";
+      pillVat.textContent = "IVA: —";
+      pillNet.textContent = "Netto: —";
+      return;
+    }
+
+    const net = gross / (1 + vat);
+    const iva = gross - net;
+
+    const net2 = Math.round(net * 100) / 100;
+    const iva2 = Math.round(iva * 100) / 100;
+    const gross2 = Math.round(gross * 100) / 100;
+
+    netEl.textContent = fmtEUR(net2);
+    breakdownEl.textContent = `Netto ${fmtEUR(net2)} • IVA ${fmtEUR(iva2)}`;
+
+    pillGross.textContent = `Lordo: ${fmtEUR(gross2)}`;
+    pillVat.textContent = `IVA: ${fmtEUR(iva2)}`;
+    pillNet.textContent = `Netto: ${fmtEUR(net2)}`;
+  }
+
+  grossEl.addEventListener("input", calc);
+  vatEl.addEventListener("change", calc);
+  calc();
+</script>
+</body>
+</html>
