@@ -3,9 +3,9 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Oggi è festivo?</title>
 
-  <meta name="description" content="Scopri subito se oggi è festivo in Italia. Risposta chiara: SÌ o NO.">
+  <title>Oggi è festivo? Verifica subito e cosa cambia per lavoro, scuole e banche</title>
+  <meta name="description" content="Scopri subito se oggi è festivo in Italia (SÌ/NO) e cosa cambia davvero per lavoro, scuole, banche, uffici e parcheggi. Include festività nazionali e domeniche + FAQ.">
   <meta name="robots" content="index, follow">
   <meta name="theme-color" content="#0f0f10">
 
@@ -15,159 +15,364 @@
   <link rel="manifest" href="./manifest.webmanifest">
 
   <style>
+    :root {
+      --bg: #0f0f10;
+      --card: #18181b;
+      --text: #ffffff;
+      --muted: rgba(255,255,255,0.7);
+      --muted2: rgba(255,255,255,0.6);
+      --shadow: 0 10px 30px rgba(0,0,0,0.4);
+      --radius: 16px;
+    }
+
+    * { box-sizing: border-box; }
+
     body {
       margin: 0;
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      background: #0f0f10;
-      color: #ffffff;
+      background: var(--bg);
+      color: var(--text);
     }
+
+    a { color: inherit; opacity: 0.9; }
+    a:hover { opacity: 1; }
+
     .wrap {
       min-height: 100vh;
       display: flex;
-      align-items: center;
       justify-content: center;
       padding: 24px;
     }
-    .card {
-      max-width: 520px;
+
+    main.container {
       width: 100%;
-      background: #18181b;
-      border-radius: 16px;
+      max-width: 820px;
+    }
+
+    .card {
+      width: 100%;
+      background: var(--card);
+      border-radius: var(--radius);
       padding: 24px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+      box-shadow: var(--shadow);
     }
+
     h1 {
-      margin: 0 0 12px 0;
+      margin: 0 0 10px 0;
       font-size: 22px;
-      opacity: 0.9;
+      opacity: 0.95;
+      letter-spacing: 0.2px;
     }
+
+    .intro {
+      margin: 0 0 18px 0;
+      font-size: 14px;
+      line-height: 1.5;
+      color: var(--muted);
+    }
+
     .date {
       font-size: 14px;
-      opacity: 0.7;
-      margin-bottom: 24px;
+      color: var(--muted);
+      margin-bottom: 18px;
     }
+
     .answer {
       font-size: 96px;
       font-weight: 800;
       line-height: 1;
-      margin-bottom: 12px;
+      margin: 0 0 10px 0;
     }
+
     .detail {
       font-size: 18px;
-      opacity: 0.85;
+      opacity: 0.9;
+      margin-bottom: 18px;
     }
+
     .note {
-      margin-top: 24px;
+      margin-top: 18px;
       font-size: 13px;
-      opacity: 0.6;
-      line-height: 1.4;
+      color: var(--muted2);
+      line-height: 1.45;
+    }
+
+    .section {
+      margin-top: 18px;
+      padding-top: 18px;
+      border-top: 1px solid rgba(255,255,255,0.08);
+    }
+
+    h2 {
+      margin: 0 0 10px 0;
+      font-size: 16px;
+      opacity: 0.95;
+    }
+
+    h3 {
+      margin: 14px 0 6px 0;
+      font-size: 14px;
+      opacity: 0.95;
+    }
+
+    p {
+      margin: 0 0 10px 0;
+      font-size: 14px;
+      line-height: 1.55;
+      color: var(--muted);
+    }
+
+    details {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 12px;
+      padding: 12px 12px;
+      margin: 10px 0;
+    }
+
+    summary {
+      cursor: pointer;
+      font-size: 14px;
+      color: rgba(255,255,255,0.9);
+      list-style: none;
+    }
+    summary::-webkit-details-marker { display: none; }
+
+    .links ul {
+      margin: 10px 0 0 18px;
+      padding: 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .footer-note {
+      margin-top: 14px;
+      font-size: 12px;
+      color: var(--muted2);
+      line-height: 1.45;
     }
   </style>
 </head>
 
 <body>
   <div class="wrap">
-    <div class="card">
-      <h1>Oggi è festivo?</h1>
-      <div class="date" id="date"></div>
-      <div class="answer" id="answer">—</div>
-      <div class="detail" id="detail"></div>
-      <div class="note">
-        Include festività nazionali italiane e la domenica.
-      </div>
-    </div>
+    <main class="container">
+      <section class="card" aria-label="Verifica se oggi è festivo" id="tool">
+        <h1>Oggi è festivo?</h1>
+        <p class="intro">
+          Ti serve saperlo per lavoro, scuole, banche, uffici o parcheggi. Qui trovi la risposta immediata (SÌ/NO)
+          e una guida pratica su cosa cambia davvero.
+        </p>
+
+        <div class="date" id="date"></div>
+        <div class="answer" id="answer">—</div>
+        <div class="detail" id="detail"></div>
+
+        <div class="note">
+          Include festività nazionali italiane e la domenica. Non include festività locali (es. santo patrono) e regole specifiche dei singoli Comuni.
+        </div>
+
+        <div class="section" aria-label="Cosa cambia davvero">
+          <h2>Cosa cambia davvero quando è festivo</h2>
+
+          <h3>Lavoro</h3>
+          <p>
+            “Festivo” non significa automaticamente “non si lavora”. Dipende dal contratto, dal settore e dalla turnazione.
+            In molti casi chi lavora nei festivi ha maggiorazioni previste dal CCNL.
+          </p>
+
+          <h3>Scuole</h3>
+          <p>
+            Le scuole seguono il calendario scolastico regionale. Le festività nazionali sono comuni, ma quelle locali possono variare
+            (e non sempre coincidono con “oggi è festivo” a livello nazionale).
+          </p>
+
+          <h3>Banche e uffici</h3>
+          <p>
+            Nelle festività nazionali, spesso banche e uffici pubblici sono chiusi. In caso di festività locali, può cambiare da città a città.
+            I servizi online possono restare disponibili anche quando gli sportelli sono chiusi.
+          </p>
+
+          <h3>Parcheggi e ZTL</h3>
+          <p>
+            Nessuna regola unica: dipende dal Comune, dalla zona e dal tipo di parcheggio. “Festivo” può cambiare orari e tariffe,
+            ma non è garantito. Controlla sempre la segnaletica o il sito del Comune.
+          </p>
+        </div>
+
+        <div class="section" aria-label="Domande frequenti">
+          <h2>Domande frequenti</h2>
+
+          <details>
+            <summary>Oggi è festivo in tutta Italia?</summary>
+            <p>No. Alcune festività sono nazionali, altre sono locali (ad esempio il santo patrono) e valgono solo in specifiche città/comuni.</p>
+          </details>
+
+          <details>
+            <summary>Se oggi è festivo, le scuole sono chiuse?</summary>
+            <p>Spesso sì per le festività nazionali. Per le festività locali dipende dal calendario scolastico regionale e dalle delibere.</p>
+          </details>
+
+          <details>
+            <summary>Se oggi è festivo, banche e uffici sono chiusi?</summary>
+            <p>Di solito nelle festività nazionali sì. Per festività locali può variare. Alcuni servizi online restano operativi.</p>
+          </details>
+
+          <details>
+            <summary>Se oggi è festivo, i parcheggi sono gratis?</summary>
+            <p>Non esiste una regola valida ovunque. Dipende dal Comune, dalla zona e dal tipo di parcheggio. Verifica le regole locali.</p>
+          </details>
+
+          <p class="footer-note">
+            Nota: questa pagina non sostituisce regolamenti comunali, calendari scolastici regionali o indicazioni contrattuali.
+          </p>
+        </div>
+
+        <div class="section links" aria-label="Altri calcolatori utili">
+          <h2>Altri calcolatori utili</h2>
+          <ul>
+            <li><a href="../scorporo-iva/">Scorporo IVA</a></li>
+            <li><a href="../sconto-percentuale/">Sconto percentuale</a></li>
+            <li><a href="../supermercati-aperti-oggi/">Supermercati aperti oggi</a></li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- FAQ Schema -->
+      <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Oggi è festivo in tutta Italia?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "No. Alcune festività sono nazionali, altre sono locali (ad esempio il santo patrono) e valgono solo in specifiche città/comuni."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Se oggi è festivo, le scuole sono chiuse?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Spesso sì per le festività nazionali. Per le festività locali dipende dal calendario scolastico regionale e dalle delibere."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Se oggi è festivo, banche e uffici sono chiusi?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Di solito nelle festività nazionali sì. Per festività locali può variare. Alcuni servizi online restano operativi."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Se oggi è festivo, i parcheggi sono gratis?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Non esiste una regola valida ovunque. Dipende dal Comune, dalla zona e dal tipo di parcheggio. Verifica le regole locali."
+            }
+          }
+        ]
+      }
+      </script>
+    </main>
   </div>
 
-<script>
-  const today = new Date();
+  <script>
+    const today = new Date();
 
-  const days = ["Domenica","Lunedì","Martedì","Mercoledì","Giovedì","Venerdì","Sabato"];
-  const months = ["gennaio","febbraio","marzo","aprile","maggio","giugno","luglio","agosto","settembre","ottobre","novembre","dicembre"];
+    const days = ["Domenica","Lunedì","Martedì","Mercoledì","Giovedì","Venerdì","Sabato"];
+    const months = ["gennaio","febbraio","marzo","aprile","maggio","giugno","luglio","agosto","settembre","ottobre","novembre","dicembre"];
 
-  function formatDate(d) {
-    return `${days[d.getDay()]} ${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`;
-  }
+    function formatDate(d) {
+      return `${days[d.getDay()]} ${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`;
+    }
 
-  function pad(n) {
-    return n < 10 ? "0" + n : n;
-  }
+    function pad(n) {
+      return n < 10 ? "0" + n : n;
+    }
 
-  function iso(d) {
-    return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
-  }
+    function iso(d) {
+      return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+    }
 
-  function easter(year) {
-    const f = Math.floor;
-    const a = year % 19;
-    const b = f(year / 100);
-    const c = year % 100;
-    const d = f(b / 4);
-    const e = b % 4;
-    const g = f((8 * b + 13) / 25);
-    const h = (19 * a + b - d - g + 15) % 30;
-    const i = f(c / 4);
-    const k = c % 4;
-    const l = (32 + 2 * e + 2 * i - h - k) % 7;
-    const m = f((a + 11 * h + 22 * l) / 451);
-    const month = f((h + l - 7 * m + 114) / 31);
-    const day = ((h + l - 7 * m + 114) % 31) + 1;
-    return new Date(year, month - 1, day);
-  }
+    function easter(year) {
+      const f = Math.floor;
+      const a = year % 19;
+      const b = f(year / 100);
+      const c = year % 100;
+      const d = f(b / 4);
+      const e = b % 4;
+      const g = f((8 * b + 13) / 25);
+      const h = (19 * a + b - d - g + 15) % 30;
+      const i = f(c / 4);
+      const k = c % 4;
+      const l = (32 + 2 * e + 2 * i - h - k) % 7;
+      const m = f((a + 11 * h + 22 * l) / 451);
+      const month = f((h + l - 7 * m + 114) / 31);
+      const day = ((h + l - 7 * m + 114) % 31) + 1;
+      return new Date(year, month - 1, day);
+    }
 
-  function italianHolidays(year) {
-    const map = {};
-    map[`${year}-01-01`] = "Capodanno";
-    map[`${year}-01-06`] = "Epifania";
-    map[`${year}-04-25`] = "Festa della Liberazione";
-    map[`${year}-05-01`] = "Festa dei Lavoratori";
-    map[`${year}-06-02`] = "Festa della Repubblica";
-    map[`${year}-08-15`] = "Ferragosto";
-    map[`${year}-11-01`] = "Ognissanti";
-    map[`${year}-12-08`] = "Immacolata Concezione";
-    map[`${year}-12-25`] = "Natale";
-    map[`${year}-12-26`] = "Santo Stefano";
+    function italianHolidays(year) {
+      const map = {};
+      map[`${year}-01-01`] = "Capodanno";
+      map[`${year}-01-06`] = "Epifania";
+      map[`${year}-04-25`] = "Festa della Liberazione";
+      map[`${year}-05-01`] = "Festa dei Lavoratori";
+      map[`${year}-06-02`] = "Festa della Repubblica";
+      map[`${year}-08-15`] = "Ferragosto";
+      map[`${year}-11-01`] = "Ognissanti";
+      map[`${year}-12-08`] = "Immacolata Concezione";
+      map[`${year}-12-25`] = "Natale";
+      map[`${year}-12-26`] = "Santo Stefano";
 
-    const e = easter(year);
-    const em = new Date(e);
-    em.setDate(e.getDate() + 1);
+      const e = easter(year);
+      const em = new Date(e);
+      em.setDate(e.getDate() + 1);
 
-    map[iso(e)] = "Pasqua";
-    map[iso(em)] = "Lunedì dell’Angelo";
+      map[iso(e)] = "Pasqua";
+      map[iso(em)] = "Lunedì dell’Angelo";
 
-    return map;
-  }
+      return map;
+    }
 
-  document.getElementById("date").textContent = formatDate(today);
+    document.getElementById("date").textContent = formatDate(today);
 
-  const holidays = italianHolidays(today.getFullYear());
-  const key = iso(today);
+    const holidays = italianHolidays(today.getFullYear());
+    const key = iso(today);
 
-  let isHoliday = false;
-  let label = "";
+    let isHoliday = false;
+    let label = "";
 
-  if (holidays[key]) {
-    isHoliday = true;
-    label = holidays[key];
-  } else if (today.getDay() === 0) {
-    isHoliday = true;
-    label = "Domenica";
-  }
+    if (holidays[key]) {
+      isHoliday = true;
+      label = holidays[key];
+    } else if (today.getDay() === 0) {
+      isHoliday = true;
+      label = "Domenica";
+    }
 
-  const answerEl = document.getElementById("answer");
-  const detailEl = document.getElementById("detail");
+    const answerEl = document.getElementById("answer");
+    const detailEl = document.getElementById("detail");
 
-  if (isHoliday) {
-    answerEl.textContent = "SÌ";
-    detailEl.textContent = label;
-  } else {
-    answerEl.textContent = "NO";
-    detailEl.textContent = "Giorno lavorativo";
-  }
+    if (isHoliday) {
+      answerEl.textContent = "SÌ";
+      detailEl.textContent = label;
+    } else {
+      answerEl.textContent = "NO";
+      detailEl.textContent = "Giorno lavorativo";
+    }
 
-  // Service Worker (GitHub Pages-friendly path)
-  if ("serviceWorker" in navigator) {
-    navigator.serviceWorker.register("./sw.js").catch(() => {});
-  }
-</script>
+    // Service Worker (GitHub Pages-friendly path)
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("./sw.js").catch(() => {});
+    }
+  </script>
 </body>
 </html>
