@@ -3,121 +3,301 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Scorporo IVA 22%: calcola netto e IVA</title>
-  <meta name="description" content="Scorporo IVA 22% immediato: inserisci il prezzo lordo e ottieni netto e IVA in un secondo.">
+
+  <title>Scorporo IVA: calcola imponibile e IVA dal lordo (22%, 10%, 5%, 4%)</title>
+  <meta name="description" content="Scorporo IVA immediato: inserisci il prezzo lordo e ottieni imponibile (netto) e IVA. Include esempi pratici, errori comuni e FAQ con formule.">
   <meta name="robots" content="index, follow">
   <meta name="theme-color" content="#0f0f10">
 
   <style>
-    body{margin:0;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:#0f0f10;color:#fff}
-    .wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px}
-    .card{max-width:560px;width:100%;background:#18181b;border-radius:16px;padding:24px;box-shadow:0 10px 30px rgba(0,0,0,.4)}
-    h1{margin:0 0 8px 0;font-size:22px;opacity:.92}
-    .sub{margin:0 0 18px 0;font-size:14px;opacity:.7;line-height:1.4}
-    label{display:block;font-size:13px;opacity:.8;margin:12px 0 6px}
-    input,select{width:100%;padding:12px 12px;border-radius:12px;border:1px solid rgba(255,255,255,.12);background:#0f0f10;color:#fff;font-size:16px;outline:none}
+    :root{
+      --bg:#0f0f10;
+      --card:#18181b;
+      --text:#fff;
+      --muted:rgba(255,255,255,.72);
+      --muted2:rgba(255,255,255,.6);
+      --stroke:rgba(255,255,255,.12);
+      --shadow:0 10px 30px rgba(0,0,0,.4);
+      --radius:16px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+      background:var(--bg);
+      color:var(--text)
+    }
+    a{color:inherit;opacity:.9}
+    a:hover{opacity:1}
+
+    .wrap{min-height:100vh;display:flex;justify-content:center;padding:24px}
+    main.container{width:100%;max-width:900px}
+
+    .card{
+      width:100%;
+      background:var(--card);
+      border-radius:var(--radius);
+      padding:24px;
+      box-shadow:var(--shadow)
+    }
+
+    h1{margin:0 0 8px 0;font-size:22px;opacity:.95}
+    .sub{margin:0 0 18px 0;font-size:14px;color:var(--muted);line-height:1.45}
+
+    label{display:block;font-size:13px;opacity:.85;margin:12px 0 6px}
+    input,select{
+      width:100%;
+      padding:12px 12px;
+      border-radius:12px;
+      border:1px solid var(--stroke);
+      background:var(--bg);
+      color:var(--text);
+      font-size:16px;
+      outline:none
+    }
+
     .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+
     .big{font-size:56px;font-weight:850;line-height:1;margin:18px 0 8px}
-    .detail{font-size:16px;opacity:.85;line-height:1.35}
-    .note{margin-top:18px;font-size:12px;opacity:.6;line-height:1.4}
+    .detail{font-size:16px;opacity:.88;line-height:1.35}
+    .note{margin-top:14px;font-size:12px;color:var(--muted2);line-height:1.45}
+
     .row{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
-    .pill{padding:10px 12px;border-radius:999px;background:rgba(255,255,255,.06);font-size:13px;opacity:.9}
+    .pill{padding:10px 12px;border-radius:999px;background:rgba(255,255,255,.06);font-size:13px;opacity:.92}
+
+    .section{
+      margin-top:18px;
+      padding-top:18px;
+      border-top:1px solid rgba(255,255,255,.08)
+    }
+
+    h2{margin:0 0 10px 0;font-size:16px;opacity:.95}
+    h3{margin:14px 0 6px 0;font-size:14px;opacity:.95}
+    p{margin:0 0 10px 0;font-size:14px;line-height:1.55;color:var(--muted)}
+
+    details{
+      background:rgba(255,255,255,.04);
+      border:1px solid rgba(255,255,255,.06);
+      border-radius:12px;
+      padding:12px 12px;
+      margin:10px 0;
+    }
+    summary{
+      cursor:pointer;
+      font-size:14px;
+      color:rgba(255,255,255,.9);
+      list-style:none;
+    }
+    summary::-webkit-details-marker{display:none}
+
+    .links ul{
+      margin:10px 0 0 18px;
+      padding:0;
+      color:var(--muted);
+      font-size:14px;
+      line-height:1.6
+    }
+
+    .tiny{
+      margin-top:12px;
+      font-size:12px;
+      color:var(--muted2);
+      line-height:1.45
+    }
   </style>
 </head>
 
 <body>
   <div class="wrap">
-    <div class="card">
-      <h1>Scorporo IVA</h1>
-      <p class="sub">Inserisci il prezzo <b>lordo</b>. Ottieni subito <b>netto</b> e <b>IVA</b>.</p>
+    <main class="container">
+      <section class="card" aria-label="Scorporo IVA" id="tool">
+        <h1>Scorporo IVA</h1>
+        <p class="sub">
+          Hai solo l’importo <b>lordo</b> e ti serve ricavare <b>imponibile (netto)</b> e <b>IVA</b>?
+          Usa il calcolatore e confronta gli esempi per evitare l’errore classico: calcolare “il 22% del lordo”.
+        </p>
 
-      <div class="grid">
-        <div>
-          <label for="gross">Prezzo lordo (€)</label>
-          <input id="gross" inputmode="decimal" placeholder="es. 122,00">
+        <div class="grid">
+          <div>
+            <label for="gross">Prezzo lordo (€)</label>
+            <input id="gross" inputmode="decimal" placeholder="es. 122,00">
+          </div>
+          <div>
+            <label for="vat">Aliquota IVA</label>
+            <select id="vat">
+              <option value="22" selected>22%</option>
+              <option value="10">10%</option>
+              <option value="5">5%</option>
+              <option value="4">4%</option>
+            </select>
+          </div>
         </div>
-        <div>
-          <label for="vat">Aliquota IVA</label>
-          <select id="vat">
-            <option value="22" selected>22%</option>
-            <option value="10">10%</option>
-            <option value="5">5%</option>
-            <option value="4">4%</option>
-          </select>
+
+        <div class="big" id="net">€ —</div>
+        <div class="detail" id="breakdown">Netto — • IVA —</div>
+
+        <div class="row">
+          <div class="pill" id="pillGross">Lordo: —</div>
+          <div class="pill" id="pillVat">IVA: —</div>
+          <div class="pill" id="pillNet">Netto: —</div>
         </div>
-      </div>
 
-      <div class="big" id="net">€ —</div>
-      <div class="detail" id="breakdown">Netto — • IVA —</div>
+        <div class="note">
+          Formula: imponibile = lordo / (1 + IVA). IVA = lordo - imponibile. Arrotondamento a 2 decimali.
+        </div>
 
-      <div class="row">
-        <div class="pill" id="pillGross">Lordo: —</div>
-        <div class="pill" id="pillVat">IVA: —</div>
-        <div class="pill" id="pillNet">Netto: —</div>
-      </div>
+        <div class="section" aria-label="Esempi pratici">
+          <h2>Esempi rapidi (per capire se i numeri tornano)</h2>
 
-      <div class="note">
-        Calcolo: netto = lordo / (1 + IVA). IVA = lordo - netto. Arrotondamento a 2 decimali.
-      </div>
-    </div>
+          <h3>IVA 22%</h3>
+          <p>Lordo 122,00 € → Imponibile 100,00 € → IVA 22,00 €</p>
+
+          <h3>IVA 10%</h3>
+          <p>Lordo 110,00 € → Imponibile 100,00 € → IVA 10,00 €</p>
+
+          <h3>Errore comune</h3>
+          <p>
+            “Tolgo il 22% dal lordo” è sbagliato: l’IVA si calcola sull’imponibile, non sul totale.
+            Lo scorporo corretto divide per (1 + aliquota).
+          </p>
+        </div>
+
+        <div class="section" aria-label="Domande frequenti">
+          <h2>Domande frequenti</h2>
+
+          <details>
+            <summary>Come si calcola lo scorporo IVA dal lordo?</summary>
+            <p>Imponibile = Lordo / (1 + aliquota). IVA = Lordo - Imponibile.</p>
+          </details>
+
+          <details>
+            <summary>Scorporo IVA e “calcolo IVA” sono la stessa cosa?</summary>
+            <p>No. Il calcolo IVA parte dall’imponibile e aggiunge l’IVA. Lo scorporo parte dal lordo e separa imponibile e IVA.</p>
+          </details>
+
+          <details>
+            <summary>Quale aliquota devo usare?</summary>
+            <p>Dipende dal bene/servizio e dalla normativa applicabile. Le aliquote più comuni sono 22%, 10%, 5% e 4%.</p>
+          </details>
+
+          <p class="tiny">
+            Nota: questa pagina è un calcolatore. Per casi fiscali particolari (regimi speciali, reverse charge, ecc.) servono regole specifiche.
+          </p>
+        </div>
+
+        <div class="section links" aria-label="Altri calcolatori utili">
+          <h2>Altri calcolatori utili</h2>
+          <ul>
+            <li><a href="../oggi-e-festivo/">Oggi è festivo</a></li>
+            <li><a href="../sconto-percentuale/">Sconto percentuale</a></li>
+            <li><a href="../supermercati-aperti-oggi/">Supermercati aperti oggi</a></li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- FAQ Schema -->
+      <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Come si calcola lo scorporo IVA dal lordo?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Imponibile = Lordo / (1 + aliquota). IVA = Lordo - Imponibile."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Scorporo IVA e calcolo IVA sono la stessa cosa?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "No. Il calcolo IVA parte dall’imponibile e aggiunge l’IVA. Lo scorporo parte dal lordo e separa imponibile e IVA."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Quale aliquota devo usare?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Dipende dal bene/servizio e dalla normativa applicabile. Le aliquote più comuni sono 22%, 10%, 5% e 4%."
+            }
+          }
+        ]
+      }
+      </script>
+    </main>
   </div>
 
-<script>
-  const grossEl = document.getElementById("gross");
-  const vatEl = document.getElementById("vat");
-  const netEl = document.getElementById("net");
-  const breakdownEl = document.getElementById("breakdown");
-  const pillGross = document.getElementById("pillGross");
-  const pillVat = document.getElementById("pillVat");
-  const pillNet = document.getElementById("pillNet");
+  <script>
+    const grossEl = document.getElementById("gross");
+    const vatEl = document.getElementById("vat");
+    const netEl = document.getElementById("net");
+    const breakdownEl = document.getElementById("breakdown");
+    const pillGross = document.getElementById("pillGross");
+    const pillVat = document.getElementById("pillVat");
+    const pillNet = document.getElementById("pillNet");
 
-  function parseEuro(s) {
-    if (!s) return NaN;
-    // accetta "122,50" o "122.50" o "1.234,56"
-    const cleaned = s
-      .toString()
-      .trim()
-      .replace(/\s/g, "")
-      .replace(/\./g, "")
-      .replace(",", ".");
-    return Number(cleaned);
-  }
+    function parseEuro(s) {
+      if (!s) return NaN;
+      // accetta "122,50" o "122.50" o "1.234,56"
+      const cleaned = s
+        .toString()
+        .trim()
+        .replace(/\s/g, "")
+        .replace(/\./g, "")
+        .replace(",", ".");
+      return Number(cleaned);
+    }
 
-  function fmtEUR(n) {
-    return new Intl.NumberFormat("it-IT", { style: "currency", currency: "EUR" }).format(n);
-  }
+    function fmtEUR(n) {
+      return new Intl.NumberFormat("it-IT", { style: "currency", currency: "EUR" }).format(n);
+    }
 
-  function calc() {
-    const gross = parseEuro(grossEl.value);
-    const vat = Number(vatEl.value) / 100;
-
-    if (!isFinite(gross) || gross <= 0) {
+    function resetUI() {
       netEl.textContent = "€ —";
       breakdownEl.textContent = "Netto — • IVA —";
       pillGross.textContent = "Lordo: —";
       pillVat.textContent = "IVA: —";
       pillNet.textContent = "Netto: —";
-      return;
     }
 
-    const net = gross / (1 + vat);
-    const iva = gross - net;
+    function calc() {
+      const gross = parseEuro(grossEl.value);
+      const vat = Number(vatEl.value) / 100;
 
-    const net2 = Math.round(net * 100) / 100;
-    const iva2 = Math.round(iva * 100) / 100;
-    const gross2 = Math.round(gross * 100) / 100;
+      if (!isFinite(gross) || gross <= 0) {
+        resetUI();
+        return;
+      }
 
-    netEl.textContent = fmtEUR(net2);
-    breakdownEl.textContent = `Netto ${fmtEUR(net2)} • IVA ${fmtEUR(iva2)}`;
+      const net = gross / (1 + vat);
+      const iva = gross - net;
 
-    pillGross.textContent = `Lordo: ${fmtEUR(gross2)}`;
-    pillVat.textContent = `IVA: ${fmtEUR(iva2)}`;
-    pillNet.textContent = `Netto: ${fmtEUR(net2)}`;
-  }
+      const net2 = Math.round(net * 100) / 100;
+      const iva2 = Math.round(iva * 100) / 100;
+      const gross2 = Math.round(gross * 100) / 100;
 
-  grossEl.addEventListener("input", calc);
-  vatEl.addEventListener("change", calc);
-  calc();
-</script>
+      netEl.textContent = fmtEUR(net2);
+      breakdownEl.textContent = `Netto ${fmtEUR(net2)} • IVA ${fmtEUR(iva2)}`;
+
+      pillGross.textContent = `Lordo: ${fmtEUR(gross2)}`;
+      pillVat.textContent = `IVA: ${fmtEUR(iva2)}`;
+      pillNet.textContent = `Netto: ${fmtEUR(net2)}`;
+    }
+
+    grossEl.addEventListener("input", calc);
+    vatEl.addEventListener("change", calc);
+
+    resetUI();
+    calc();
+
+    // Service Worker (GitHub Pages-friendly path)
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("./sw.js").catch(() => {});
+    }
+  </script>
 </body>
 </html>
